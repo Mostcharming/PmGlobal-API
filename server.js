@@ -15,22 +15,22 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-// mongoose
-//   .connect(process.env.DATABASE_LOCAL, {
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-//     // useCreateIndex: true,
-//     // useFindAndModify: false,
-//   })
-//   .then(() => console.log('DB connection successful!'));
-
 mongoose
-  .connect(DB, {
+  .connect(process.env.DATABASE_LOCAL, {
+    useUnifiedTopology: true,
     useNewUrlParser: true,
     // useCreateIndex: true,
     // useFindAndModify: false,
   })
   .then(() => console.log('DB connection successful!'));
+
+// mongoose
+//   .connect(DB, {
+//     useNewUrlParser: true,
+//     // useCreateIndex: true,
+//     // useFindAndModify: false,
+//   })
+//   .then(() => console.log('DB connection successful!'));
 
 const port = process.env.PORT || 3001;
 const server = app.listen(port, () => {
@@ -47,9 +47,9 @@ process.on('unhandledRejection', (err) => {
 });
 
 //heroku emits SIGTERM signals time to time
-process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
-  server.close(() => {
-    console.log('💥 Process terminated!');
-  });
-});
+// process.on('SIGTERM', () => {
+//   console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+//   server.close(() => {
+//     console.log('💥 Process terminated!');
+//   });
+// });

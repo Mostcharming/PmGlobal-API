@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -11,8 +12,17 @@ const cors = require('cors');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const usersRouter = require('./routes/usersRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
+
+app.use('/', viewRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+//pug
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use((req, res, next) => {
   if (!req.get('Authorization')) {
@@ -57,6 +67,7 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 });
+
 app.use('/users', limiter);
 
 app.use(express.json({ limit: '10kb' }));
